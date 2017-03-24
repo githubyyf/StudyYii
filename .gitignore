@@ -14,7 +14,9 @@ Thumbs.db
 
 # composer vendor dir
 /vendor/*
-！/vendor/yiisoft
+
+#设置不忽略的文件
+!/vendor/yiisoft
 
 # composer itself is not needed
 composer.phar
