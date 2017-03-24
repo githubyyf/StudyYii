@@ -13,7 +13,7 @@ nbproject
 Thumbs.db
 
 # composer vendor dir
-/vendor
+/vendor/*
 ！/vendor/yiisoft
 
 # composer itself is not needed
