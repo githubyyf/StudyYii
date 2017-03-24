@@ -17,25 +17,33 @@ use yii\di\Instance;
  * 迁移脚本的设计是被用于"yii migrate"的命令
  * Migration is designed to be used together with the "yii migrate" command.
  *
- * Each child class of Migration represents an individual database migration which
+ * 每一个迁移脚本的子类代表一个数据库的迁移脚步个体（通过子类的名称进行标识和区分），
+ * Each child class of Migration represents an individual（个体） database migration which
  * is identified by the child class name.
  *
- * Within each migration, the [[up()]] method should be overridden to contain the logic
+ * 在每个迁移脚本中，[[up()]]方法应该被隐式的包含了"upgrading"（执行）数据库的逻辑。
+ * [[down()]]方法是"downgrading"（回滚）的逻辑。"yii migrate"命令在一个应用程序中管理所有可用的迁移
+ * Within（在） each migration, the [[up()]] method should be overridden to contain the logic（逻辑）
  * for "upgrading" the database; while the [[down()]] method for the "downgrading"
- * logic. The "yii migrate" command manages all available migrations in an application.
+ * logic. The "yii migrate" command manages（管理） all available migrations in an application.
  *
- * If the database supports transactions, you may also override [[safeUp()]] and
+ * 如果数据库提供事务，你也会覆盖[[safeUp()]]和[[safeDown()]]，以至于如果有任何的错误在upgrading 或者 downgrading发生，
+ * 所有的迁移脚本回立即恢复，
+ * If the database supports transactions（事务）, you may also override [[safeUp()]] and
  * [[safeDown()]] so that if anything wrong happens during the upgrading or downgrading,
- * the whole migration can be reverted in a whole.
+ * the whole migration can be reverted（恢复） in a whole.
  *
- * Migration provides a set of convenient methods for manipulating database data and schema.
+ * 迁移脚本提供了一系列的简单的方法操纵数据库的数据和模式。
+ * 例如，[[insert()]]方法可以被简单的插入一条数据到数据库的表中，[[createTable()]]方法可以用于创建表。
+ * 相对于命令行执行的脚本中同样的方法，这些方法会有显示一些扩展的方面在参数和执行时间方面，
+ * Migration provides a set of convenient（方便） methods for manipulating（操纵） database data and schema（模式）.
  * For example, the [[insert()]] method can be used to easily insert a row of data into
  * a database table; the [[createTable()]] method can be used to create a database table.
  * Compared with the same methods in [[Command]], these methods will display extra
- * information showing the method parameters and execution time, which may be useful when
+ * information（信息） showing the method parameters and execution time, which may be useful when
  * applying migrations.
- *
- * For more details and usage information on Migration, see the [guide article on Migration](guide:db-migrations).
+ * 关于迁移脚本更多的细节和使用信息，请参考【迁移脚本指导文章】(guide:db-migrations)
+ * For more details and usage（使用） information on Migration, see the [guide article on Migration](guide:db-migrations).
  *
  * @author Qiang Xue <qiang.xue@gmail.com>
  * @since 2.0
@@ -45,11 +53,14 @@ class Migration extends Component implements MigrationInterface
     use SchemaBuilderTrait;
 
     /**
+     * @var Connection|array|string 数据库连接对象或者数据库连接的应用程序组件ID应该和迁移脚本一起工作。
+     * 自从版本2.0.2，可以通过配置文件数组创建对象。
      * @var Connection|array|string the DB connection object or the application component ID of the DB connection
      * that this migration should work with. Starting from version 2.0.2, this can also be a configuration array
      * for creating the object.
-     *
-     * Note that when a Migration object is created by the `migrate` command, this property will be overwritten
+     * 注意，当迁移脚本对象通过迁移脚本命令创建，这个项目会被命令行重写，如果你不想通过使用通过命令行提供的数据库连接，
+     * 你可以重写[[init()]]方法，格式如下：
+     * Note that when a Migration object is created by the `migrate` command, this property（性能） will be overwritten
      * by the command. If you do not want to use the DB connection provided by the command, you may override
      * the [[init()]] method like the following:
      *
@@ -65,6 +76,8 @@ class Migration extends Component implements MigrationInterface
 
 
     /**
+     * 初始化迁移脚本
+     * 如果[[db]]是`null`这个方法将会设置[[db]]为'db'应用组件，
      * Initializes the migration.
      * This method will set [[db]] to be the 'db' application component, if it is `null`.
      */
@@ -86,6 +99,7 @@ class Migration extends Component implements MigrationInterface
     }
 
     /**
+     * 这个方法包含的逻辑在使用迁移脚本的时候被扩展。
      * This method contains the logic to be executed when applying this migration.
      * Child classes may override this method to provide actual migration logic.
      * @return bool return a false value to indicate the migration fails

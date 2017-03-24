@@ -10,8 +10,10 @@ namespace yii\di;
 use Yii;
 use yii\base\InvalidConfigException;
 
+//todo yyf
 /**
- * Instance represents a reference to a named object in a dependency injection (DI) container or a service locator.
+ * 实例代表代表一个对象的名称
+ * Instance represents a reference（参考） to a named object in a dependency injection (DI) container or a service locator.
  *
  * You may use [[get()]] to obtain the actual object referenced by [[id]].
  *
