@@ -231,7 +231,7 @@ class Migration extends Component implements MigrationInterface
     /**
      *创建和执行一个INSERT SQL语句。
      * Creates and executes an INSERT SQL statement.
-     * 这个语句将正确的选取对应的列名，并且绑定对应的值。
+     * 这个方法将正确的选取对应的列名，并且绑定对应的值插入表中。
      * The method will properly escape the column names, and bind the values to be inserted.
      * @param string $table 新的一列记录将被插入的表的名称。the table that new rows will be inserted into.
      * @param array $columns 被插入表的数据列（列名=>值），是键值对的格式。
@@ -246,11 +246,13 @@ class Migration extends Component implements MigrationInterface
     }
 
     /**
+     * 创建和执行一批INSERT SQL语句。
      * Creates and executes an batch INSERT SQL statement.
+     * 这个方法将正确的选取对应的列名，并且绑定对应的值插入表中。
      * The method will properly escape the column names, and bind the values to be inserted.
-     * @param string $table the table that new rows will be inserted into.
-     * @param array $columns the column names.
-     * @param array $rows the rows to be batch inserted into the table
+     * @param string $table 新的一些数据将被插入的表的名称。the table that new rows will be inserted into.
+     * @param array $columns 列的名称。the column names.
+     * @param array $rows 行批量插入到表中。the rows to be batch inserted into the table
      */
     public function batchInsert($table, $columns, $rows)
     {
@@ -261,13 +263,16 @@ class Migration extends Component implements MigrationInterface
     }
 
     /**
+     * 创建和执行一个UPDATE SQL语句
      * Creates and executes an UPDATE SQL statement.
+     * 这个方法将正确的选取对应的列名，并且绑定对应的值更新到表中。
      * The method will properly escape the column names and bind the values to be updated.
-     * @param string $table the table to be updated.
-     * @param array $columns the column data (name => value) to be updated.
-     * @param array|string $condition the conditions that will be put in the WHERE part. Please
+     * @param string $table 需要被更新的表的名称。the table to be updated.
+     * @param array $columns 需要被更新的列的数组（列名=>值）。the column data (name => value) to be updated.
+     * @param array|string $condition conditions的内容将被当做where()条件内容。请到[[Query::where()]]查看如何指定条件
+     * the conditions that will be put in the WHERE part. Please
      * refer to [[Query::where()]] on how to specify conditions.
-     * @param array $params the parameters to be bound to the query.
+     * @param array $params 将参数绑定到查询。the parameters to be bound to the query.
      */
     public function update($table, $columns, $condition = '', $params = [])
     {
