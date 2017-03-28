@@ -53,7 +53,7 @@ class Migration extends Component implements MigrationInterface
     use SchemaBuilderTrait;
 
     /**
-     * @var Connection|array|string 数据库连接对象或者数据库连接的应用程序组件ID应该和迁移脚本一起工作。
+     *  数据库连接对象或者数据库连接的应用程序组件ID应该和迁移脚本一起工作。
      * 自从版本2.0.2，可以通过配置文件数组创建对象。
      * @var Connection|array|string the DB connection object or the application component ID of the DB connection
      * that this migration should work with. Starting from version 2.0.2, this can also be a configuration array
@@ -101,8 +101,11 @@ class Migration extends Component implements MigrationInterface
     /**
      * 这个方法包含的逻辑在使用迁移脚本的时候被扩展。
      * This method contains the logic to be executed when applying this migration.
+     * 子类会覆盖这个方法，提供实际的迁移脚本逻辑。
      * Child classes may override this method to provide actual migration logic.
-     * @return bool return a false value to indicate the migration fails
+     * @return bool 返回值是布尔型，如果返回的是false,表明迁移脚本执行失败，不应该进行进一步的。
+     * 所有其他返回值意味着迁移成功。
+     * return a false value to indicate（表明） the migration fails
      * and should not proceed further. All other return values mean the migration succeeds.
      */
     public function up()
@@ -128,10 +131,15 @@ class Migration extends Component implements MigrationInterface
     }
 
     /**
+     * 这个方法包含的逻辑是在执行migrate/down的时候执行。
      * This method contains the logic to be executed when removing this migration.
+     * 默认实现抛出一个异常指示迁移不能被删除
      * The default implementation throws an exception indicating the migration cannot be removed.
+     * 子类可以重写这个方法如果相应的迁移可以删除
      * Child classes may override this method if the corresponding migrations can be removed.
-     * @return bool return a false value to indicate the migration fails
+     * @return  bool 返回值是布尔型，如果返回的是false,表明迁移脚本执行失败，不应该进行进一步的。
+     * 所有其他返回值意味着迁移成功。
+     * return a false value to indicate the migration fails
      * and should not proceed further. All other return values mean the migration succeeds.
      */
     public function down()
@@ -157,21 +165,27 @@ class Migration extends Component implements MigrationInterface
     }
 
     /**
+     * 抛出异常
      * @param \Throwable|\Exception $e
      */
     private function printException($e)
     {
+
         echo 'Exception: ' . $e->getMessage() . ' (' . $e->getFile() . ':' . $e->getLine() . ")\n";
         echo $e->getTraceAsString() . "\n";
     }
 
     /**
+     * 该方法包含的逻辑在执行migrate 的时候执行
      * This method contains the logic to be executed when applying this migration.
+     * 这种方法不同于 [[up()]]在DB逻辑实现将封闭在一个数据库事务
      * This method differs from [[up()]] in that the DB logic implemented here will
      * be enclosed within a DB transaction.
+     * 如果数据库逻辑需要在一个事务中可以用子类可以实现这个方法替代[[up()]]。
      * Child classes may implement this method instead of [[up()]] if the DB logic
      * needs to be within a transaction.
-     * @return bool return a false value to indicate the migration fails
+     * @return bool 返回值是布尔型，如果返回值是false表明脚本执行失败，不应该进行下一步操作。所有的其他返回值都表示操作成功。
+     * return a false value to indicate the migration fails
      * and should not proceed further. All other return values mean the migration succeeds.
      */
     public function safeUp()
@@ -179,12 +193,16 @@ class Migration extends Component implements MigrationInterface
     }
 
     /**
+     * 该方法包含的逻辑在执行migrate/down 的时候执行
      * This method contains the logic to be executed when removing this migration.
+     * 这种方法不同于 [[down()]]在DB逻辑实现将封闭在一个数据库事务
      * This method differs from [[down()]] in that the DB logic implemented here will
      * be enclosed within a DB transaction.
+     * 如果数据库逻辑需要在一个事务中可以用子类可以实现这个方法替代[[down()]]。
      * Child classes may implement this method instead of [[down()]] if the DB logic
      * needs to be within a transaction.
-     * @return bool return a false value to indicate the migration fails
+     * @return bool 返回值是布尔型，如果返回值是false表明脚本执行失败，不应该进行下一步操作。所有的其他返回值都表示操作成功。
+     * return a false value to indicate the migration fails
      * and should not proceed further. All other return values mean the migration succeeds.
      */
     public function safeDown()
@@ -192,10 +210,14 @@ class Migration extends Component implements MigrationInterface
     }
 
     /**
+     * 执行一条sql语句。
      * Executes a SQL statement.
+     * 这个方法通过[[db]]执行原生的SQL语句。
      * This method executes the specified SQL statement using [[db]].
-     * @param string $sql the SQL statement to be executed
-     * @param array $params input parameters (name => value) for the SQL execution.
+     * @param string $sql 需要被执行的SQL语句字符串。the SQL statement to be executed
+     * @param array $params SQL语句是输入键值对格式参数。
+     * input parameters (name => value) for the SQL execution.
+     * 更多详细细节看[[Command::execute()]]
      * See [[Command::execute()]] for more details.
      */
     public function execute($sql, $params = [])
@@ -207,10 +229,13 @@ class Migration extends Component implements MigrationInterface
     }
 
     /**
+     *创建和执行一个INSERT SQL语句。
      * Creates and executes an INSERT SQL statement.
+     * 这个语句将正确的选取对应的列名，并且绑定对应的值。
      * The method will properly escape the column names, and bind the values to be inserted.
-     * @param string $table the table that new rows will be inserted into.
-     * @param array $columns the column data (name => value) to be inserted into the table.
+     * @param string $table 新的一列记录将被插入的表的名称。the table that new rows will be inserted into.
+     * @param array $columns 被插入表的数据列（列名=>值），是键值对的格式。
+     * the column data (name => value) to be inserted into the table.
      */
     public function insert($table, $columns)
     {
