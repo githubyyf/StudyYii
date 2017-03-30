@@ -11,8 +11,9 @@ use Yii;
 use yii\base\Object;
 
 /**
+ * 列创建概要帮助定义数据库类型概要，用于PHP接口。
  * ColumnSchemaBuilder helps to define database schema types using a PHP interface.
- *
+ * 看[[SchemaBuilderTrait]]有更多的细节描述和用例。
  * See [[SchemaBuilderTrait]] for more detailed description and usage examples.
  *
  * @author Vasenin Matvey <vaseninm@gmail.com>

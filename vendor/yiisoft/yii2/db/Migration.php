@@ -283,11 +283,14 @@ class Migration extends Component implements MigrationInterface
     }
 
     /**
+     * 创建和执行DELETE SQL语句
      * Creates and executes a DELETE SQL statement.
-     * @param string $table the table where the data will be deleted from.
-     * @param array|string $condition the conditions that will be put in the WHERE part. Please
+     * @param string $table  被删除的数据来源的表the table where the data will be deleted from.
+     * @param array|string $condition 内容将被放入到where条件中。如何明确的指定条件，参考[[Query::where()]]。
+     * the conditions that will be put in the WHERE part. Please
      * refer to [[Query::where()]] on how to specify conditions.
-     * @param array $params the parameters to be bound to the query.
+     * @param array $params   将参数绑定到查询
+     * the parameters to be bound to the query.
      */
     public function delete($table, $condition = '', $params = [])
     {
@@ -298,20 +301,22 @@ class Migration extends Component implements MigrationInterface
     }
 
     /**
+     * 绑定和执行SQL语句，为DB（数据库）创建一张表。
      * Builds and executes a SQL statement for creating a new DB table.
-     *
+     * 新表中的列应该被明确定义名称和类型，（例如：'名称'=>'类型'）,
+     * 此时的name通过正确的方法被定义为一个列的名称，definition代表的列类型可以包含一个抽象的DB类型
      * The columns in the new  table should be specified as name-definition pairs (e.g. 'name' => 'string'),
      * where name stands for a column name which will be properly quoted by the method, and definition
      * stands for the column type which can contain an abstract DB type.
-     *
+     * The [[QueryBuilder::getColumnType()]]方法将调用任何抽象类型转换成一个物理地址。
      * The [[QueryBuilder::getColumnType()]] method will be invoked to convert any abstract type into a physical one.
-     *
+     * 如果指定一个列定义只有(e.g. 'PRIMARY KEY (name, type)'),它将直接生成的SQL
      * If a column is specified with definition only (e.g. 'PRIMARY KEY (name, type)'), it will be directly
      * put into the generated SQL.
      *
-     * @param string $table the name of the table to be created. The name will be properly quoted by the method.
-     * @param array $columns the columns (name => definition) in the new table.
-     * @param string $options additional SQL fragment that will be appended to the generated SQL.
+     * @param string $table 被创建的表的名称，将被正确引用方法的名称。the name of the table to be created. The name will be properly quoted by the method.
+     * @param array $columns 表中列的名称和类型（name => definition）。the columns (name => definition) in the new table.
+     * @param string $options 额外的SQL片段将添加到生成的SQL。additional SQL fragment that will be appended to the generated SQL.
      */
     public function createTable($table, $columns, $options = null)
     {
