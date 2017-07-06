@@ -12,7 +12,11 @@ use yii\base\InlineAction;
 use yii\console\Controller;
 
 /**
+ * 这是gii的命令行版本--代码生成器
  * This is the command line version of Gii - a code generator.
+ *
+ * 你可以用这个命令生成模型，控制器等，例如，生成数据库中存在的表的的记录模型，执行如下操作：
+ * ./yii gii/model --tableName=表的名称 --modelClass=生成的模型名称
  *
  * You can use this command to generate models, controllers, etc. For example,
  * to generate an ActiveRecord model based on a DB table, you can run:
@@ -32,17 +36,21 @@ class GenerateController extends Controller
      */
     public $module;
     /**
+     * 在非交换模式下是否覆盖所有的现有代码。默认是否，意味着现有的代码文件都不会被覆盖，
+     * 这个操作只被用在`--interactive=0`
      * @var boolean whether to overwrite all existing code files when in non-interactive mode.
      * Defaults to false, meaning none of the existing code files will be overwritten.
      * This option is used only when `--interactive=0`.
      */
     public $overwrite = false;
     /**
+     * 数组，-可用代码生成器的列表
      * @var array a list of the available code generators
      */
     public $generators = [];
 
     /**
+     * 数组，-代码生成器操作的值
      * @var array generator option values
      */
     private $_options = [];
