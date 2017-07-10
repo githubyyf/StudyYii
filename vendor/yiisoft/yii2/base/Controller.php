@@ -87,7 +87,10 @@ class Controller extends Component implements ViewContextInterface
     }
 
     /**
+     * 声明控制器外的actions
      * Declares external actions for the controller.
+     * 此方法的目的是为控制器声明外部操作.这个方法的返回值是一个数组，数组的键是活动的ID，数组的值是相应的活动类的名称或者是活动的配置数组。
+     * 例如：
      * This method is meant to be overwritten to declare external actions for the controller.
      * It should return an array, with array keys being action IDs, and array values the corresponding
      * action class names or action configuration arrays. For example,
@@ -102,7 +105,7 @@ class Controller extends Component implements ViewContextInterface
      *     ],
      * ];
      * ```
-     *
+     * [[\Yii::createObject()]] 将使用此处提供的配置创建稍后的请求的操作。
      * [[\Yii::createObject()]] will be used later to create the requested action
      * using the configuration provided here.
      */
@@ -205,7 +208,11 @@ class Controller extends Component implements ViewContextInterface
     }
 
     /**
+     * 创建一个活动是根据给出的活动ID
      * Creates an action based on the given action ID.
+     * 这个放法首先检查给出的活动ID在[[actions()]]中是否被声明,如果是，它将使用在那里声明的配置来创建操作对象。
+     * 如果不是，它将寻找一个控制器方法，它的名称以“actionXyz”的格式，其中“Xyz”代表动作ID。
+     * 如果发现，将创建表示该方法的[[InlineAction]]，并返回。
      * The method first checks if the action ID has been declared in [[actions()]]. If so,
      * it will use the configuration declared there to create the action object.
      * If not, it will look for a controller method whose name is in the format of `actionXyz`
