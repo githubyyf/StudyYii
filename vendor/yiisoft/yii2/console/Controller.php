@@ -194,11 +194,14 @@ class Controller extends \yii\base\Controller
     }
 
     /**
+     * 将字符串打印到STDOUT
      * Prints a string to STDOUT
      *
+     * 可以使用在yii helper控制台中定义的常量来传递附加的参数，可以选择使用ANSI代码格式化字符串。
      * You may optionally format the string with ANSI codes by
      * passing additional parameters using the constants defined in [[\yii\helpers\Console]].
      *
+     * 例如：
      * Example:
      *
      * ```

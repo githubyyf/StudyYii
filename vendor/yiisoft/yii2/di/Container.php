@@ -123,26 +123,35 @@ class Container extends Component
 
 
     /**
+     * 返回被请求类的一个实例
      * Returns an instance of the requested class.
      *
+     * 您可以提供构造函数参数($params)和对象配置($config)在创建实例时将使用该方法。
      * You may provide constructor parameters (`$params`) and object configurations (`$config`)
      * that will be used during the creation of the instance.
      *
+     * 如果类实现了yii基础配置，那么$config参数将作为最后一个参数传递参数给类构造函数;否则，配置将在对象实例化之后被应用。
      * If the class implements [[\yii\base\Configurable]], the `$config` parameter will be passed as the last
      * parameter to the class constructor; Otherwise, the configuration will be applied *after* the object is
      * instantiated.
      *
+     * 注意，如果通过调用setSingleton()将类声明为单例，那么每次调用该方法时将返回类的相同实例。
+     * 在这种情况下，只有在第一次实例化类时，才会使用构造函数参数和对象配置。
      * Note that if the class is declared to be singleton by calling [[setSingleton()]],
      * the same instance of the class will be returned each time this method is called.
      * In this case, the constructor parameters and object configurations will be used
      * only if the class is instantiated the first time.
      *
-     * @param string $class the class name or an alias name (e.g. `foo`) that was previously registered via [[set()]]
+     * @param string $class 类名或别名(例如foo)以前是通过set()或setSingleton()注册的。the class name or an alias name (e.g. `foo`) that was previously registered via [[set()]]
      * or [[setSingleton()]].
-     * @param array $params a list of constructor parameter values. The parameters should be provided in the order
+     * @param array $params 一个构造函数参数值的列表。参数应该按照它们在构造函数声明中出现的顺序提供。
+     * 如果您想要跳过一些参数，那么应该用在构造函数参数列表中表示它们位置的整数来索引其余的参数。
+     * a list of constructor parameter values. The parameters should be provided in the order
      * they appear in the constructor declaration. If you want to skip some parameters, you should index the remaining
      * ones with the integers that represent their positions in the constructor parameter list.
-     * @param array $config a list of name-value pairs that will be used to initialize the object properties.
+     *
+     * @param array $config 将用于初始化对象属性的名称-值对列表.
+     * a list of name-value pairs that will be used to initialize the object properties.
      * @return object an instance of the requested class.
      * @throws InvalidConfigException if the class cannot be recognized or correspond to an invalid definition
      * @throws NotInstantiableException If resolved to an abstract class or an interface (since 2.0.9)
@@ -183,7 +192,6 @@ class Container extends Component
             // singleton
             $this->_singletons[$class] = $object;
         }
-
         return $object;
     }
 

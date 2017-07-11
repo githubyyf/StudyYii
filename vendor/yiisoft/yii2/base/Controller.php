@@ -218,8 +218,9 @@ class Controller extends Component implements ViewContextInterface
      * If not, it will look for a controller method whose name is in the format of `actionXyz`
      * where `Xyz` stands for the action ID. If found, an [[InlineAction]] representing that
      * method will be created and returned.
-     * @param string $id the action ID.
+     * @param string $id the action ID. 活动ID
      * @return Action the newly created action instance. Null if the ID doesn't resolve into any action.
+     *                操作新创建的动作实例。如果ID不解析为任何动作，则Null
      */
     public function createAction($id)
     {

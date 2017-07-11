@@ -293,18 +293,22 @@ class BaseYii
     }
 
     /**
+     * 使用给定的配置创建一个新对象
      * Creates a new object using the given configuration.
-     *
+     * 您可以将该方法看作是新操作符的增强版本.
      * You may view this method as an enhanced version of the `new` operator.
+     * 该方法支持基于类名创建对象,一个配置数组或一个匿名函数。
      * The method supports creating an object based on a class name, a configuration array or
      * an anonymous function.
-     *
+     * 下面是一些使用示例:
      * Below are some usage examples:
      *
      * ```php
+     *  //创建一个对象使用class名称
      * // create an object using a class name
      * $object = Yii::createObject('yii\db\Connection');
      *
+     *  //创建一个对象使用配置数组
      * // create an object using a configuration array
      * $object = Yii::createObject([
      *     'class' => 'yii\db\Connection',
@@ -314,24 +318,31 @@ class BaseYii
      *     'charset' => 'utf8',
      * ]);
      *
+     * //创建带有两个构造函数参数的对象
      * // create an object with two constructor parameters
      * $object = \Yii::createObject('MyClass', [$param1, $param2]);
      * ```
-     *
+     * 使用[[\yii\di\Container|dependency injection container]]，
+     * 该方法还可以识别依赖对象，实例化它们并将它们注入新创建的对象中。
      * Using [[\yii\di\Container|dependency injection container]], this method can also identify
      * dependent objects, instantiate them and inject them into the newly created object.
      *
-     * @param string|array|callable $type the object type. This can be specified in one of the following forms:
+     * @param string|array|callable $type the object type.对象类型。
+     * This can be specified in one of the following forms:可以在以下表单中指定：
      *
-     * - a string: representing the class name of the object to be created
+     * - a string: representing the class name of the object to be created 表示要创建的对象的类名
      * - a configuration array: the array must contain a `class` element which is treated as the object class,
      *   and the rest of the name-value pairs will be used to initialize the corresponding object properties
+     * 该数组必须包含一个类元素，该元素被当作对象类对待，其余的名称-值对将被用来初始化对应的对象属性。
+     *
+     *
      * - a PHP callable: either an anonymous function or an array representing a class method (`[$class or $object, $method]`).
      *   The callable should return a new instance of the object being created.
+     *要么是匿名函数，要么是表示类方法的数组(`[$class or $object, $method]`)。callable应该返回正在创建的对象的一个新实例。
      *
-     * @param array $params the constructor parameters
-     * @return object the created object
-     * @throws InvalidConfigException if the configuration is invalid.
+     * @param array $params the constructor parameters -构造函数的参数
+     * @return object the created object- 创建的对象
+     * @throws InvalidConfigException if the configuration is invalid.-如果配置是无效的
      * @see \yii\di\Container
      */
     public static function createObject($type, array $params = [])

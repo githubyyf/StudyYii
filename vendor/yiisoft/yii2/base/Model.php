@@ -312,27 +312,39 @@ class Model extends Component implements IteratorAggregate, ArrayAccess, Arrayab
     }
 
     /**
+     * 执行数据验证。
      * Performs the data validation.
      *
+     * 这个方法是确认当前的规则是否使用当前的场景。
      * This method executes the validation rules applicable to the current [[scenario]].
+     * 下面的标准用于确定一个规则是否适用：
      * The following criteria are used to determine whether a rule is currently applicable:
      *
+     * - 规则必须与与当前场景相关的属性相关联;
+     * - 规则必须对当前的场景有效。
      * - the rule must be associated with the attributes relevant to the current scenario;
      * - the rules must be effective for the current scenario.
      *
+     * 这个方法会调用[[beforeValidate()]] 和 [[afterValidate()]]在实际的规则之前和之后。
+     * 如果 [[beforeValidate()]]返回false,执行数据验证的防护会执行（直接返回false），
+     * [[afterValidate()]]方法不会被调用。
      * This method will call [[beforeValidate()]] and [[afterValidate()]] before and
      * after the actual validation, respectively. If [[beforeValidate()]] returns false,
      * the validation will be cancelled and [[afterValidate()]] will not be called.
      *
+     * 在验证过程中发现的错误可以通过[[getErrors()]]、[[getFirstErrors()]] 和 [[getFirstError()]]进行检索。
      * Errors found during the validation can be retrieved via [[getErrors()]],
      * [[getFirstErrors()]] and [[getFirstError()]].
      *
-     * @param array $attributeNames list of attribute names that should be validated.
+     * @param array $attributeNames 应该验证的属性名称列表。
+     *                              如果这个参数是空的，那么它意味着在适用的验证规则中列出的任何属性都应该被验证。
+     *  list of attribute names that should be validated.
      * If this parameter is empty, it means any attribute listed in the applicable
      * validation rules should be validated.
-     * @param bool $clearErrors whether to call [[clearErrors()]] before performing validation
-     * @return bool whether the validation is successful without any error.
-     * @throws InvalidParamException if the current scenario is unknown.
+     * @param bool $clearErrors     是否调用[[clearErrors()]]，在准备执行验证方法之前。
+     * whether to call [[clearErrors()]] before performing validation
+     * @return bool whether 验证是否成功没有任何错误。the validation is successful without any error.
+     * @throws InvalidParamException 如果当前的场景未知。if the current scenario is unknown.
      */
     public function validate($attributeNames = null, $clearErrors = true)
     {
