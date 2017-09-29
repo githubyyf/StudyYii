@@ -1,8 +1,8 @@
 <?php
 /**
- * @link http://www.yiiframework.com/
+ * @link      http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
- * @license http://www.yiiframework.com/license/
+ * @license   http://www.yiiframework.com/license/
  */
 
 namespace yii\data;
@@ -58,20 +58,20 @@ use yii\web\Request;
  *
  * For more details and usage information on Pagination, see the [guide article on pagination](guide:output-pagination).
  *
- * @property int $limit The limit of the data. This may be used to set the LIMIT value for a SQL statement for
+ * @property int   $limit     The limit of the data. This may be used to set the LIMIT value for a SQL statement for
  * fetching the current page of data. Note that if the page size is infinite, a value -1 will be returned. This
  * property is read-only.
- * @property array $links The links for navigational purpose. The array keys specify the purpose of the links
+ * @property array $links     The links for navigational purpose. The array keys specify the purpose of the links
  * (e.g. [[LINK_FIRST]]), and the array values are the corresponding URLs. This property is read-only.
- * @property int $offset The offset of the data. This may be used to set the OFFSET value for a SQL statement
+ * @property int   $offset    The offset of the data. This may be used to set the OFFSET value for a SQL statement
  * for fetching the current page of data. This property is read-only.
- * @property int $page The zero-based current page number.
- * @property int $pageCount Number of pages. This property is read-only.
- * @property int $pageSize The number of items per page. If it is less than 1, it means the page size is
+ * @property int   $page      The zero-based current page number.
+ * @property int   $pageCount Number of pages. This property is read-only.
+ * @property int   $pageSize  The number of items per page. If it is less than 1, it means the page size is
  * infinite, and thus a single page contains all items.
  *
  * @author Qiang Xue <qiang.xue@gmail.com>
- * @since 2.0
+ * @since  2.0
  */
 class Pagination extends Object implements Linkable
 {
@@ -154,9 +154,9 @@ class Pagination extends Object implements Linkable
         if ($pageSize < 1) {
             return $this->totalCount > 0 ? 1 : 0;
         } else {
-            $totalCount = $this->totalCount < 0 ? 0 : (int) $this->totalCount;
+            $totalCount = $this->totalCount < 0 ? 0 : (int)$this->totalCount;
 
-            return (int) (($totalCount + $pageSize - 1) / $pageSize);
+            return (int)(($totalCount + $pageSize - 1) / $pageSize);
         }
     }
 
@@ -170,7 +170,7 @@ class Pagination extends Object implements Linkable
     public function getPage($recalculate = false)
     {
         if ($this->_page === null || $recalculate) {
-            $page = (int) $this->getQueryParam($this->pageParam, 1) - 1;
+            $page = (int)$this->getQueryParam($this->pageParam, 1) - 1;
             $this->setPage($page, true);
         }
 
@@ -179,16 +179,16 @@ class Pagination extends Object implements Linkable
 
     /**
      * Sets the current page number.
-     * @param int $value the zero-based index of the current page.
+     * @param int  $value        the zero-based index of the current page.
      * @param bool $validatePage whether to validate the page number. Note that in order
-     * to validate the page number, both [[validatePage]] and this parameter must be true.
+     *                           to validate the page number, both [[validatePage]] and this parameter must be true.
      */
     public function setPage($value, $validatePage = false)
     {
         if ($value === null) {
             $this->_page = null;
         } else {
-            $value = (int) $value;
+            $value = (int)$value;
             if ($validatePage && $this->validatePage) {
                 $pageCount = $this->getPageCount();
                 if ($value >= $pageCount) {
@@ -203,9 +203,13 @@ class Pagination extends Object implements Linkable
     }
 
     /**
+     * 返回每页的项目数。
      * Returns the number of items per page.
+     * 默认情况下，这个方法会根据参数中的[[pageSizeParam]]来确定页面的大小。
      * By default, this method will try to determine the page size by [[pageSizeParam]] in [[params]].
+     * 如果页面大小不能确定这种方式，[[defaultPageSize]]将返回。
      * If the page size cannot be determined this way, [[defaultPageSize]] will be returned.
+     * 每页中项目的数目。如果小于1，这意味着页面大小是无限的，因此一个页面包含所有条目。
      * @return int the number of items per page. If it is less than 1, it means the page size is infinite,
      * and thus a single page contains all items.
      * @see pageSizeLimit
@@ -217,7 +221,7 @@ class Pagination extends Object implements Linkable
                 $pageSize = $this->defaultPageSize;
                 $this->setPageSize($pageSize);
             } else {
-                $pageSize = (int) $this->getQueryParam($this->pageSizeParam, $this->defaultPageSize);
+                $pageSize = (int)$this->getQueryParam($this->pageSizeParam, $this->defaultPageSize);
                 $this->setPageSize($pageSize, true);
             }
         }
@@ -226,7 +230,9 @@ class Pagination extends Object implements Linkable
     }
 
     /**
-     * @param int $value the number of items per page.
+     * $value 数值类型，每页的项目数量
+     * @param int  $value            the number of items per page.
+     *                               $validatePageSize 是否验证页面大小的值
      * @param bool $validatePageSize whether to validate page size.
      */
     public function setPageSize($value, $validatePageSize = false)
@@ -234,8 +240,9 @@ class Pagination extends Object implements Linkable
         if ($value === null) {
             $this->_pageSize = null;
         } else {
-            $value = (int) $value;
+            $value = (int)$value;
             if ($validatePageSize && isset($this->pageSizeLimit[0], $this->pageSizeLimit[1]) && count($this->pageSizeLimit) === 2) {
+                //验证$value的值，$value必须在pageSizeLimit之间，如果小于pageSizeLimit最小值将设置为最小值，大于pageSizeLimit最大值将设置为最大值
                 if ($value < $this->pageSizeLimit[0]) {
                     $value = $this->pageSizeLimit[0];
                 } elseif ($value > $this->pageSizeLimit[1]) {
@@ -249,8 +256,8 @@ class Pagination extends Object implements Linkable
     /**
      * Creates the URL suitable for pagination with the specified page number.
      * This method is mainly called by pagers when creating URLs used to perform pagination.
-     * @param int $page the zero-based page number that the URL should point to.
-     * @param int $pageSize the number of items on each page. If not set, the value of [[pageSize]] will be used.
+     * @param int  $page     the zero-based page number that the URL should point to.
+     * @param int  $pageSize the number of items on each page. If not set, the value of [[pageSize]] will be used.
      * @param bool $absolute whether to create an absolute URL. Defaults to `false`.
      * @return string the created URL
      * @see params
@@ -258,8 +265,8 @@ class Pagination extends Object implements Linkable
      */
     public function createUrl($page, $pageSize = null, $absolute = false)
     {
-        $page = (int) $page;
-        $pageSize = (int) $pageSize;
+        $page = (int)$page;
+        $pageSize = (int)$pageSize;
         if (($params = $this->params) === null) {
             $request = Yii::$app->getRequest();
             $params = $request instanceof Request ? $request->getQueryParams() : [];
@@ -313,7 +320,7 @@ class Pagination extends Object implements Linkable
      * Returns a whole set of links for navigating to the first, last, next and previous pages.
      * @param bool $absolute whether the generated URLs should be absolute.
      * @return array the links for navigational purpose. The array keys specify the purpose of the links (e.g. [[LINK_FIRST]]),
-     * and the array values are the corresponding URLs.
+     *                       and the array values are the corresponding URLs.
      */
     public function getLinks($absolute = false)
     {
@@ -337,7 +344,7 @@ class Pagination extends Object implements Linkable
     /**
      * Returns the value of the specified query parameter.
      * This method returns the named parameter value from [[params]]. Null is returned if the value does not exist.
-     * @param string $name the parameter name
+     * @param string $name         the parameter name
      * @param string $defaultValue the value to be returned when the specified parameter does not exist in [[params]].
      * @return string the parameter value
      */

@@ -1,8 +1,8 @@
 <?php
 /**
- * @link http://www.yiiframework.com/
+ * @link      http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
- * @license http://www.yiiframework.com/license/
+ * @license   http://www.yiiframework.com/license/
  */
 
 namespace yii\data;
@@ -16,25 +16,28 @@ use yii\base\InvalidParamException;
  *
  * For more details and usage information on BaseDataProvider, see the [guide article on data providers](guide:output-data-providers).
  *
- * @property int $count The number of data models in the current page. This property is read-only.
- * @property array $keys The list of key values corresponding to [[models]]. Each data model in [[models]] is
+ * @property int              $count      The number of data models in the current page. This property is read-only.
+ * @property array            $keys       The list of key values corresponding to [[models]]. Each data model in [[models]] is
  * uniquely identified by the corresponding key value in this array.
- * @property array $models The list of data models in the current page.
+ * @property array            $models     The list of data models in the current page.
  * @property Pagination|false $pagination The pagination object. If this is false, it means the pagination is
  * disabled. Note that the type of this property differs in getter and setter. See [[getPagination()]] and
  * [[setPagination()]] for details.
- * @property Sort|bool $sort The sorting object. If this is false, it means the sorting is disabled. Note that
+ * @property Sort|bool        $sort       The sorting object. If this is false, it means the sorting is disabled. Note that
  * the type of this property differs in getter and setter. See [[getSort()]] and [[setSort()]] for details.
- * @property int $totalCount Total number of possible data models.
+ * @property int              $totalCount Total number of possible data models.
  *
  * @author Qiang Xue <qiang.xue@gmail.com>
- * @since 2.0
+ * @since  2.0
  */
 abstract class BaseDataProvider extends Component implements DataProviderInterface
 {
     /**
+     *一个数据提供者中的唯一标识的字符串（主键）
      * @var string an ID that uniquely identifies the data provider among all data providers.
+     * 如果同一页面包含两个或多个不同的数据提供者设置这个属性
      * You should set this property if the same page contains two or more different data providers.
+     * 否则，the [[pagination]] and [[sort]]可能不正确
      * Otherwise, the [[pagination]] and [[sort]] may not work properly.
      */
     public $id;
@@ -162,9 +165,12 @@ abstract class BaseDataProvider extends Component implements DataProviderInterfa
     }
 
     /**
+     * 返回数据提供者的分页对象。
      * Returns the pagination object used by this data provider.
+     * 注意：可以通过调用[[prepare()]] or [[getModels()]]获取当前of [[Pagination::totalCount]] and [[Pagination::pageCount]]的值
      * Note that you should call [[prepare()]] or [[getModels()]] first to get correct values
      * of [[Pagination::totalCount]] and [[Pagination::pageCount]].
+     *返回分页对象，或者false,如果返回false表示分页对象禁用。
      * @return Pagination|false the pagination object. If this is false, it means the pagination is disabled.
      */
     public function getPagination()
@@ -177,13 +183,19 @@ abstract class BaseDataProvider extends Component implements DataProviderInterfa
     }
 
     /**
+     * 为数据提供者设置分页。
      * Sets the pagination for this data provider.
+     * $value  配用于数据提供者分页的配置
      * @param array|Pagination|bool $value the pagination to be used by this data provider.
-     * This can be one of the following:
+     *                                     可以是下面描述中的其中一个：
+     *                                     This can be one of the following:
      *
+     * - 一个配置数据，用于创建分页对象。“类”元素默认是'yii\data\Pagination'
      * - a configuration array for creating the pagination object. The "class" element defaults
      *   to 'yii\data\Pagination'
+     * - 一个实现[[Pagination]]或者它的子类。
      * - an instance of [[Pagination]] or its subclass
+     * - 布尔值“false”，禁用分页
      * - false, if pagination needs to be disabled.
      *
      * @throws InvalidParamException
@@ -205,7 +217,9 @@ abstract class BaseDataProvider extends Component implements DataProviderInterfa
     }
 
     /**
+     * 返回数据提供值的排序对象。
      * Returns the sorting object used by this data provider.
+     * 返回排序对象，如果是false，认为排序不可用。
      * @return Sort|bool the sorting object. If this is false, it means the sorting is disabled.
      */
     public function getSort()
@@ -218,13 +232,19 @@ abstract class BaseDataProvider extends Component implements DataProviderInterfa
     }
 
     /**
+     * 为数据提供者设置排序规则。
      * Sets the sort definition for this data provider.
+     *  $value 被用于数据提供者的排序规则，
      * @param array|Sort|bool $value the sort definition to be used by this data provider.
-     * This can be one of the following:
+     *                               可以是下面中的一个：
+     *                               This can be one of the following:
      *
+     * - 一个配置数组为创建排序对象。“类”元素默认是'yii\data\Sort'
      * - a configuration array for creating the sort definition object. The "class" element defaults
      *   to 'yii\data\Sort'
+     * - 一个实现【Sort】或者它的子类
      * - an instance of [[Sort]] or its subclass
+     * - false,排序是否需要被禁用。
      * - false, if sorting needs to be disabled.
      *
      * @throws InvalidParamException
@@ -245,8 +265,11 @@ abstract class BaseDataProvider extends Component implements DataProviderInterfa
     }
 
     /**
+     * 刷新数据的提供者
      * Refreshes the data provider.
+     * 调用此方法，将会调用[[getModels()]], [[getKeys()]] or [[getTotalCount()]]这三个方法。
      * After calling this method, if [[getModels()]], [[getKeys()]] or [[getTotalCount()]] is called again,
+     * 它们将重新执行查询并返回可用的最新数据。
      * they will re-execute the query and return the latest data available.
      */
     public function refresh()
