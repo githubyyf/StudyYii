@@ -29,4 +29,10 @@
  --searchModelClass=模型名+Search
  例如：
   ./yii gii/crud --controllerClass=app\controllers\UserInfoController --modelClass=app\models\UserInfo --searchModelClass=app\models\UserInfoSearch
+  
+ ### 翻译AR（2017/9/30）
  
+ 
+ ### 测试用例
+ 
+ 执行方法： php .\vendor\codeception\codeception\codecept 对应的参数
